@@ -1,12 +1,14 @@
-
+import { Suspense } from "react";
 import "./globals.css";
-import { JetBrains_Mono, Merriweather } from "next/font/google";
+import { JetBrains_Mono, Merriweather, Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import NavbarServer from "@/components/shared/NavbarServer";
+import ToastHandler from "@/components/shared/ToastHandler";
+import { Toaster } from "@/components/ui/sonner";
 
-const merriweatherHeading = Merriweather({subsets:['latin'],variable:'--font-heading'});
-
-const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
-
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const merriweatherHeading = Merriweather({ subsets: ["latin"], variable: "--font-heading" });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export default function RootLayout({
   children,
@@ -16,14 +18,24 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full antialiased", "font-mono", jetbrainsMono.variable, merriweatherHeading.variable)}
+      className={cn(
+        "h-full antialiased",
+        jetbrainsMono.variable,
+        merriweatherHeading.variable,
+        "font-sans",
+        geist.variable
+      )}
     >
       <body className="min-h-full flex flex-col">
-        {/** navbar */}
+        <Suspense fallback={<div className="h-16 border-b" />}>
+          <NavbarServer />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ToastHandler />
+        </Suspense>
         {children}
-
-        {/** footer */}
-        </body>
+        <Toaster />
+      </body>
     </html>
   );
 }
