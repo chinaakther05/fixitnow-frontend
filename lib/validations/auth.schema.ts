@@ -7,7 +7,7 @@ export const registerSchema = z
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
     role: z.enum(["CUSTOMER", "TECHNICIAN"], {
-      required_error: "Please select a role",
+      error: "Please select a role",
     }),
     phone: z.string().optional(),
   })

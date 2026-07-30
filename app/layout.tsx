@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import NavbarServer from "@/components/shared/NavbarServer";
 import ToastHandler from "@/components/shared/ToastHandler";
 import { Toaster } from "@/components/ui/sonner";
+import QueryProvider from "@/providers/QueryProvider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const merriweatherHeading = Merriweather({ subsets: ["latin"], variable: "--font-heading" });
@@ -27,14 +28,16 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <Suspense fallback={<div className="h-16 border-b" />}>
-          <NavbarServer />
-        </Suspense>
-        <Suspense fallback={null}>
-          <ToastHandler />
-        </Suspense>
-        {children}
-        <Toaster />
+        <QueryProvider>
+          <Suspense fallback={<div className="h-16 border-b" />}>
+            <NavbarServer />
+          </Suspense>
+          <Suspense fallback={null}>
+            <ToastHandler />
+          </Suspense>
+          {children}
+          <Toaster />
+        </QueryProvider>
       </body>
     </html>
   );
