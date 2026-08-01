@@ -235,12 +235,12 @@ const ServicesPage = () => {
                                                 View Profile
                                             </Link>
 
-                                            <Link
-                                                href={`/technicians/${tech.id}?book=true`}
-                                                className="w-full text-center text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 py-2.5 rounded-xl transition-all shadow-md hover:shadow-blue-200 active:scale-95"
-                                            >
-                                                Book Now
-                                            </Link>
+                                           <Link
+  href={`/booking/${tech.id}`}
+  className="w-full text-center text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 py-2.5 rounded-xl transition-all shadow-md hover:shadow-blue-200 active:scale-95"
+>
+  Book Now
+</Link>
                                         </div>
                                     </div>
                                 </div>

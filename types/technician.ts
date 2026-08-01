@@ -33,3 +33,14 @@ export interface Technician {
   user: TechnicianUser;
   services?: Service[];
 }
+
+export interface Review {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  customer: {
+    id: string;
+    name: string;
+  };
+}
