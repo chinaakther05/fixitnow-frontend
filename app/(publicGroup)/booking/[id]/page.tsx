@@ -5,13 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { createBooking } from "@/actions/booking";
+import toast from 'react-hot-toast';
 
 export default function BookingPage() {
   const params = useParams();
   const router = useRouter();
   const technicianId = params.id as string;
 
-  // ... বাকি সব Code অপরিবর্তিত থাকবে
+  
 
   const [date, setDate] = useState("");
   const [address, setAddress] = useState("");
@@ -57,7 +58,7 @@ export default function BookingPage() {
     setIsSubmitting(false);
 
     if (result.success) {
-      alert("Booking created successfully");
+      toast.success("Booking created successfully!");
       router.push("/dashboard/customer/bookings");
     } else {
       setErrorMsg(result.message || "Booking failed");
