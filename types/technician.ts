@@ -19,6 +19,7 @@ export interface TechnicianUser {
   phone: string | null;
   address: string | null;
   profileImage: string | null;
+  description?: string;
 }
 
 export interface Technician {

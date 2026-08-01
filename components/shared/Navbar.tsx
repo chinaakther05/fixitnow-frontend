@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Menu, X, LogOut, LayoutDashboard, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import ThemeToggle from "@/components/shared/ThemeToggle";
 
 interface NavbarProps {
   isAuthenticated?: boolean
@@ -37,6 +38,7 @@ export default function Navbar({
   }
 
   const getInitials = () => {
+    if (!userName) return 'U'
     return userName
       .split(' ')
       .map((n) => n[0])
@@ -45,7 +47,7 @@ export default function Navbar({
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-background border-b border-border">
+    <nav className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -71,15 +73,18 @@ export default function Navbar({
             ))}
           </div>
 
-          {/* Desktop Auth Section */}
+          {/* Desktop Right Section (Auth + Theme Toggle) */}
           <div className="hidden md:flex items-center gap-3">
+            {/* ThemeToggle নিজেই Hydration সামলাবে */}
+            <ThemeToggle />
+
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="relative h-10 w-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+                    className="relative h-10 w-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold"
                   >
                     {getInitials()}
                   </Button>
@@ -95,20 +100,20 @@ export default function Navbar({
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer">
+                    <Link href="/dashboard" className="cursor-pointer flex items-center">
                       <LayoutDashboard className="mr-2 h-4 w-4" />
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/profile" className="cursor-pointer">
+                    <Link href="/profile" className="cursor-pointer flex items-center">
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <button className="w-full text-left cursor-pointer text-destructive">
+                    <button type="button" className="w-full text-left cursor-pointer text-destructive flex items-center">
                       <LogOut className="mr-2 h-4 w-4" />
                       Logout
                     </button>
@@ -132,21 +137,27 @@ export default function Navbar({
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMobileMenu}
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Mobile Right Controls (Theme Toggle + Menu Toggle) */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            
+            <button
+              type="button"
+              onClick={toggleMobileMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background">
           <div className="px-4 pt-2 pb-3 space-y-1">
@@ -195,6 +206,7 @@ export default function Navbar({
                   </div>
                 </Link>
                 <button
+                  type="button"
                   className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-destructive hover:bg-accent transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -205,7 +217,7 @@ export default function Navbar({
                 </button>
               </>
             ) : (
-              <>
+              <div className="grid grid-cols-2 gap-2">
                 <Button
                   variant="outline"
                   className="w-full"
@@ -214,10 +226,14 @@ export default function Navbar({
                 >
                   <Link href="/login">Login</Link>
                 </Button>
-                <Button className="w-full" asChild onClick={() => setMobileMenuOpen(false)}>
+                <Button 
+                  className="w-full" 
+                  asChild 
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   <Link href="/register">Register</Link>
                 </Button>
-              </>
+              </div>
             )}
           </div>
         </div>

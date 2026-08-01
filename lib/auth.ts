@@ -1,27 +1,36 @@
 import { cookies } from "next/headers";
-import jwt, { JwtPayload } from "jsonwebtoken";
 
-type CurrentUser = {
-  userId: string;
+type UserProfile = {
+  id: string;
+  name: string;
+  email: string;
   role: string;
 };
 
-export const getCurrentUser = async (): Promise<CurrentUser | null> => {
+export const getCurrentUser = async (): Promise<UserProfile | null> => {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
 
   if (!token) return null;
 
   try {
-    const decoded = jwt.decode(token) as JwtPayload;
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    });
 
-    if (!decoded || !decoded.userId || !decoded.role) {
-      return null;
-    }
+    if (!res.ok) return null;
+
+    const result = await res.json();
+    if (!result.success) return null;
 
     return {
-      userId: decoded.userId as string,
-      role: decoded.role as string,
+      id: result.data.id,
+      name: result.data.name,
+      email: result.data.email,
+      role: result.data.role,
     };
   } catch {
     return null;
