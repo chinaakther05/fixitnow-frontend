@@ -26,6 +26,32 @@ export const getMyBookings = async () => {
 };
 
 
+export const cancelBooking = async (bookingId: string) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
+
+  if (!token) {
+    return { success: false, message: "Not authenticated" };
+  }
+
+  try {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/bookings/${bookingId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status: "CANCELLED" }),
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return { success: false, message: "Failed to cancel booking" };
+  }
+};
+
+
 
 
 export const createBooking = async (payload: {
