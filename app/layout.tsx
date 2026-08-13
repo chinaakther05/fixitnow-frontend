@@ -9,7 +9,6 @@ import QueryProvider from "@/providers/QueryProvider";
 import Footer from "@/components/shared/Footer";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 
-
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const merriweatherHeading = Merriweather({ subsets: ["latin"], variable: "--font-heading" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -24,14 +23,13 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={cn(
-        "h-full antialiased",
+        "h-full antialiased font-sans",
         jetbrainsMono.variable,
         merriweatherHeading.variable,
-        "font-sans",
         geist.variable
       )}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -39,14 +37,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <Suspense fallback={<div className="h-16 border-b" />}>
-            <NavbarServer />
-              
+            {/* Navbar-এর জন্য ক্যাচ ফিলব্যাক সহ Suspense */}
+            <Suspense fallback={<div className="h-16 w-full border-b bg-background" />}>
+              <NavbarServer />
             </Suspense>
+
             <Suspense fallback={null}>
               <ToastHandler />
             </Suspense>
-            <main className="flex-1">{children}</main>
+
+            <main className="flex-1 w-full">{children}</main>
+
             <Footer />
             <Toaster />
           </QueryProvider>

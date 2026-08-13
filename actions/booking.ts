@@ -25,7 +25,6 @@ export const getMyBookings = async () => {
   }
 };
 
-
 export const cancelBooking = async (bookingId: string) => {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
@@ -50,9 +49,6 @@ export const cancelBooking = async (bookingId: string) => {
     return { success: false, message: "Failed to cancel booking" };
   }
 };
-
-
-
 
 export const createBooking = async (payload: {
   technicianId: string;
@@ -87,17 +83,18 @@ export const createBooking = async (payload: {
   }
 };
 
-
+// 🔍 এই ফাংশনে console.log যোগ করা হয়েছে ডিবাগ করার জন্য
 export const getTechnicianBookings = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
 
   if (!token) {
+    console.log("🔴 NO TOKEN FOUND");
     return { success: false, message: "Not authenticated", data: [] };
   }
 
   try {
-    const res = await fetch(`${process.env.BACKEND_API_URL}/api/technician/bookings`, {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/techniciand/bookings`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -105,8 +102,10 @@ export const getTechnicianBookings = async () => {
     });
 
     const result = await res.json();
+    console.log("🟢 TECHNICIAN BOOKINGS RESULT:", JSON.stringify(result, null, 2));
     return result;
   } catch (error) {
+    console.log("🔴 TECHNICIAN BOOKINGS FETCH ERROR:", error);
     return { success: false, message: "Failed to fetch bookings", data: [] };
   }
 };

@@ -28,45 +28,63 @@ export default function BookingPage() {
   });
 
   const handleBooking = async () => {
-    setErrorMsg("");
+  setErrorMsg("");
 
-    if (!date || !address) {
-      setErrorMsg("Please fill in all required fields.");
-      return;
-    }
+  if (!date || !address) {
+    setErrorMsg("Please fill in all required fields.");
+    return;
+  }
 
-    if (!technician) {
-      setErrorMsg("Technician data not loaded yet.");
-      return;
-    }
+  if (!technician) {
+    setErrorMsg("Technician data not loaded yet.");
+    return;
+  }
 
-    setIsSubmitting(true);
+  setIsSubmitting(true);
 
-    const bookingData = {
-      technicianId: technician.userId || technician.id,
-      categoryId: technician.services?.[0]?.categoryId || technician.categoryId || "",
-      serviceId: technician.services?.[0]?.id || technician.serviceId || "",
-      scheduledDate: new Date(date).toISOString(),
-      address,
-      notes: problem,
-      totalAmount: Number(technician.hourlyRate || 500),
-    };
+  const categoryId = technician.services?.[0]?.category?.id;
+  const serviceId = technician.services?.[0]?.id;
 
-    try {
-      const result = await createBooking(bookingData);
-
-      if (result.success) {
-        toast.success("Booking created successfully!");
-        router.push("/dashboard/customer/bookings");
-      } else {
-        setErrorMsg(result.message || "Booking failed");
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || "An unexpected error occurred.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const bookingData: {
+    technicianId: string;
+    categoryId?: string;
+    serviceId?: string;
+    scheduledDate: string;
+    address: string;
+    notes: string;
+    totalAmount: number;
+  } = {
+   
+    technicianId: technician.userId,
+    scheduledDate: new Date(date).toISOString(),
+    address,
+    notes: problem,
+    totalAmount: Number(technician.hourlyRate || 500),
   };
+
+  if (categoryId) {
+    bookingData.categoryId = categoryId;
+  }
+
+  if (serviceId) {
+    bookingData.serviceId = serviceId;
+  }
+
+  try {
+    const result = await createBooking(bookingData);
+
+    if (result.success) {
+      toast.success("Booking created successfully!");
+      router.push("/dashboard/customer/bookings");
+    } else {
+      setErrorMsg(result.message || "Booking failed");
+    }
+  } catch (err: any) {
+    setErrorMsg(err.message || "An unexpected error occurred.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   if (isLoading) {
     return (

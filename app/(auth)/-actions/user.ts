@@ -12,6 +12,7 @@ type LoginState = {
   };
 } | null;
 
+// 🔑 ১. Login Action
 export const loginAction = async (
   prevState: LoginState,
   formData: FormData
@@ -22,7 +23,6 @@ export const loginAction = async (
 
   let result;
 
-  // শুধু নেটওয়ার্ক/fetch-সংক্রান্ত এরর এখানে ধরা হচ্ছে
   try {
     const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/login`, {
       method: "POST",
@@ -37,12 +37,10 @@ export const loginAction = async (
     };
   }
 
-  // Login ব্যর্থ হলে সরাসরি রিটার্ন (try-catch এর বাইরে)
   if (!result.success) {
     return result;
   }
 
-  // Login সফল — cookie সেট করা
   const cookieStore = await cookies();
   cookieStore.set("accessToken", result.data.accessToken, {
     httpOnly: true,
@@ -51,17 +49,8 @@ export const loginAction = async (
     secure: process.env.NODE_ENV === "production",
   });
 
-
-  cookieStore.set("accessToken", result.data.accessToken, {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 7,
-    sameSite: "lax",
-    secure: false,
-});
   const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload;
 
-  // redirect() এখন try-catch এর বাইরে — তাই এটা ঠিকমতো কাজ করবে
-  // ?toast=login-success যোগ করা হয়েছে, যাতে dashboard পেজে গিয়ে toast দেখানো যায়
   switch (decodedToken.role) {
     case "CUSTOMER":
       redirect("/dashboard/customer?toast=login-success");
@@ -77,6 +66,7 @@ export const loginAction = async (
   }
 };
 
+// 🔑 ২. Register Action
 export const registerAction = async (payload: {
   name: string;
   email: string;
@@ -101,8 +91,92 @@ export const registerAction = async (payload: {
   }
 };
 
+// 🔑 ৩. Logout Action
 export const logoutAction = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("accessToken");
   redirect("/login?toast=logout-success");
+};
+
+// 🔑 ৪. Fetch Profile (getMe)
+export const getMe = async () => {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+      cache: "no-store",
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return {
+      success: false,
+      message: "Could not connect to server. Please try again.",
+    };
+  }
+};
+
+// 🔑 ৫. Update Profile (updateMyProfile)
+export const updateMyProfile = async (payload: {
+  name?: string;
+  phone?: string;
+  address?: string;
+}) => {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return {
+      success: false,
+      message: "Could not connect to server. Please try again.",
+    };
+  }
+};
+
+
+// 🔑 ৬. Change Password Action
+export const changePasswordAction = async (payload: {
+  currentPassword?: string;
+  newPassword?: string;
+}) => {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/change-password`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return {
+      success: false,
+      message: "Could not connect to server. Please try again.",
+    };
+  }
 };

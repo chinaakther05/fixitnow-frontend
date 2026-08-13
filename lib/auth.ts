@@ -1,3 +1,7 @@
+
+
+
+
 import { cookies } from "next/headers";
 
 type UserProfile = {
@@ -8,13 +12,21 @@ type UserProfile = {
 };
 
 export const getCurrentUser = async (): Promise<UserProfile | null> => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken")?.value;
-
-  if (!token) return null;
-
   try {
-    const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/me`, {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("accessToken")?.value;
+
+    if (!token) return null;
+
+    // API URL চেক - env variable না থাকলে fallback বা null হ্যান্ডলিং
+    const baseUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL;
+    
+    if (!baseUrl) {
+      console.error("getCurrentUser: API Base URL is missing in process.env");
+      return null;
+    }
+
+    const res = await fetch(`${baseUrl}/api/users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -24,15 +36,20 @@ export const getCurrentUser = async (): Promise<UserProfile | null> => {
     if (!res.ok) return null;
 
     const result = await res.json();
-    if (!result.success) return null;
+
+    // Data Structure Safety Check
+    const userData = result?.data || result?.user || result;
+
+    if (!userData) return null;
 
     return {
-      id: result.data.id,
-      name: result.data.name,
-      email: result.data.email,
-      role: result.data.role,
+      id: userData.id || userData._id || "",
+      name: userData.name || "",
+      email: userData.email || "",
+      role: userData.role || "USER",
     };
-  } catch {
+  } catch (error) {
+    console.error("getCurrentUser unexpected error:", error);
     return null;
   }
 };
