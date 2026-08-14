@@ -1,14 +1,29 @@
 "use client";
 
 import React, { useState } from "react";
-import { Lock, Bell, Moon, KeyRound, Globe, Save, AlertTriangle, LogOut, Trash2 } from "lucide-react";
+import {
+  Lock,
+  Bell,
+  Moon,
+  KeyRound,
+  Globe,
+  Save,
+  AlertTriangle,
+  LogOut,
+  Trash2,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import { logoutAction } from "@/app/(auth)/-actions/auth.action";
+import { changePasswordAction } from "@/app/(auth)/-actions/user";
+
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
-  
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   // Notification states
   const [emailNotif, setEmailNotif] = useState(true);
   const [bookingNotif, setBookingNotif] = useState(true);
@@ -20,15 +35,43 @@ export default function SettingsPage() {
     confirmPassword: "",
   });
 
-  const handlePasswordChange = (e: React.FormEvent) => {
+  // 🔑 Password Change Handler
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    // ১. পাসওয়ার্ড ম্যাচিং চেক
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setErrorMessage("New password and Confirm password do not match!");
+      return;
+    }
+
+    // ২. পাসওয়ার্ডের দৈর্ঘ্য চেক
+    if (passwordForm.newPassword.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const res = await changePasswordAction({
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword,
+      });
+
+      if (res?.success) {
+        setSuccessMessage("Password updated successfully!");
+        setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      } else {
+        setErrorMessage(res?.message || "Failed to update password.");
+      }
+    } catch (err) {
+      setErrorMessage("An error occurred while updating the password.");
+    } finally {
       setLoading(false);
-      alert("Password updated successfully!");
-      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
-    }, 1000);
+    }
   };
 
   return (
@@ -54,6 +97,19 @@ export default function SettingsPage() {
               <p className="text-xs text-muted-foreground">Ensure your account uses a strong password.</p>
             </div>
           </div>
+
+          {/* Feedback Messages */}
+          {errorMessage && (
+            <div className="p-3 text-xs font-medium rounded-xl bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900">
+              {errorMessage}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="p-3 text-xs font-medium rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900">
+              {successMessage}
+            </div>
+          )}
 
           <form onSubmit={handlePasswordChange} className="space-y-4 max-w-lg">
             <div className="space-y-1.5">
@@ -99,8 +155,15 @@ export default function SettingsPage() {
               disabled={loading}
               className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 mt-2"
             >
-              <Save className="w-4 h-4" />
-              {loading ? "Updating..." : "Update Password"}
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> Updating...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" /> Update Password
+                </>
+              )}
             </Button>
           </form>
         </div>
@@ -172,7 +235,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* ⚠️ DANGER ZONE SECTION ⚠️ */}
+        {/* Danger Zone Section */}
         <div className="bg-card border border-red-200 dark:border-red-900/50 rounded-2xl p-6 shadow-sm space-y-6">
           <div className="flex items-center gap-3 border-b border-red-100 dark:border-red-900/40 pb-4">
             <div className="p-2 bg-red-100 dark:bg-red-950/80 rounded-xl">
@@ -212,7 +275,11 @@ export default function SettingsPage() {
                 type="button"
                 variant="outline"
                 className="border-red-300 text-red-600 hover:bg-red-100 dark:border-red-800 dark:hover:bg-red-950/60 gap-2 shrink-0 self-start sm:self-auto"
-                onClick={() => alert("Are you sure? This action cannot be undone.")}
+                onClick={() => {
+                  if (confirm("Are you sure? This action cannot be undone.")) {
+                    alert("Account deletion request submitted.");
+                  }
+                }}
               >
                 <Trash2 className="w-4 h-4" />
                 Delete Account
