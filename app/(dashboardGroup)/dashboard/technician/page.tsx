@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { getTechnicianBookings } from '@/actions/booking';
+// TODO: আপনার প্রজেক্টের সঠিক path অনুযায়ী updateTechnicianAvailability ইম্পোর্ট করুন
+// import { updateTechnicianAvailability, getTechnicianProfile } from '@/actions/technician'; 
 import { Booking } from '@/types/booking';
 import { statusStyles } from '@/lib/statusColors';
 import { 
@@ -14,12 +16,17 @@ import {
     Briefcase, 
     ArrowRight, 
     AlertCircle,
-    CheckCircle2
+    CheckCircle2,
+    Power,
+    Loader2
 } from 'lucide-react';
 
 const TechnicianDashboardPage = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'pending' | 'upcoming' | 'completed'>('overview');
+    const [isAvailable, setIsAvailable] = useState<boolean>(true); // Local availability state
+    const queryClient = useQueryClient();
 
+    // Fetch Bookings Data
     const { data: bookings, isLoading, isError } = useQuery<Booking[]>({
         queryKey: ['techniciand-bookings'],
         queryFn: async () => {
@@ -29,11 +36,34 @@ const TechnicianDashboardPage = () => {
         },
     });
 
+    // Toggle Availability Mutation (Server Action Call)
+    const toggleAvailabilityMutation = useMutation({
+        mutationFn: async (newStatus: boolean) => {
+            // Server Action Call Here
+            // return await updateTechnicianAvailability(newStatus);
+            return { success: true }; 
+        },
+        onSuccess: () => {
+            // Real-time update confirm হওয়ার পর React Query cache invalidate করতে পারেন
+            queryClient.invalidateQueries({ queryKey: ['technician-profile'] });
+        },
+        onError: () => {
+            // Error হলে state রোডব্যাক করা
+            setIsAvailable((prev) => !prev);
+        }
+    });
+
+    const handleToggleAvailability = () => {
+        const nextStatus = !isAvailable;
+        setIsAvailable(nextStatus);
+        toggleAvailabilityMutation.mutate(nextStatus);
+    };
+
     if (isLoading) {
         return (
             <div className="max-w-7xl mx-auto px-4 py-10">
                 <div className="animate-pulse flex flex-col md:flex-row gap-8">
-                    <div className="w-full md:w-64 h-64 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+                    <div className="w-full md:w-64 h-80 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
                     <div className="flex-1 space-y-6">
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             {[1, 2, 3].map((i) => (
@@ -94,10 +124,50 @@ const TechnicianDashboardPage = () => {
                     
                     {/* Sidebar Navigation */}
                     <aside className="w-full md:w-64 shrink-0 border bg-white dark:bg-slate-900/90 border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-5 h-fit shadow-sm backdrop-blur-sm">
-                        <div className="mb-6 px-2">
+                        
+                        {/* Header & Availability Section */}
+                        <div className="mb-6 px-1 space-y-3">
                             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Technician Portal
                             </h2>
+
+                            {/* Availability Toggle Box */}
+                            <div className="p-3.5 rounded-xl border bg-slate-50 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2.5">
+                                    <span className={`relative flex h-3 w-3`}>
+                                        {isAvailable && (
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        )}
+                                        <span className={`relative inline-flex rounded-full h-3 w-3 ${isAvailable ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
+                                    </span>
+                                    <div>
+                                        <p className="text-xs font-bold leading-none text-slate-800 dark:text-slate-200">
+                                            {isAvailable ? 'Available' : 'Unavailable'}
+                                        </p>
+                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                                            {isAvailable ? 'Receiving jobs' : 'Offline'}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={handleToggleAvailability}
+                                    disabled={toggleAvailabilityMutation.isPending}
+                                    className={`p-2 rounded-lg transition-all duration-200 ${
+                                        isAvailable
+                                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-400 hover:bg-emerald-200'
+                                            : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300 hover:bg-slate-300'
+                                    }`}
+                                    title="Toggle Availability Status"
+                                >
+                                    {toggleAvailabilityMutation.isPending ? (
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                        <Power className="w-4 h-4" />
+                                    )}
+                                </button>
+                            </div>
                         </div>
 
                         <nav className="space-y-1.5">
