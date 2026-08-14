@@ -67,3 +67,20 @@ export const updateUserStatus = async (userId: string, status: string) => {
     return { success: false, message: "Failed to update user status" };
   }
 };
+
+
+export const getAllServicesAdmin = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
+
+  try {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/services`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      cache: "no-store",
+    });
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return { success: false, message: "Failed to fetch services", data: [] };
+  }
+};
