@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getMe } from "@/app/(auth)/-actions/user";
-// আপনার আসল API / Server Action থেকে `getMe` এবং `updateProfile` ইম্পোর্ট করুন
+
 
 
 export default function CustomerProfilePage() {
@@ -34,7 +34,7 @@ export default function CustomerProfilePage() {
     address: "",
   });
 
-  // 🔑 ১. ব্যাকএন্ড থেকে বর্তমান ইউজারের রিয়েল ডাটা ফেচ করা
+ 
   const {
     data: user,
     isLoading,
@@ -49,7 +49,7 @@ export default function CustomerProfilePage() {
     },
   });
 
-  // ডাটা লোড হলে ফর্মের স্টেট আপডেট করা
+ 
   useEffect(() => {
     if (user) {
       setFormData({
@@ -60,7 +60,7 @@ export default function CustomerProfilePage() {
     }
   }, [user]);
 
-  // 🔑 ২. ব্যাকএন্ডে ডাটা আপডেট করার Mutation
+
   const updateMutation = useMutation({
     mutationFn: async (updatedData: typeof formData) => {
       const res = await updateMyProfile(updatedData);

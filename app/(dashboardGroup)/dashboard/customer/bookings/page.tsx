@@ -42,8 +42,8 @@ export default function BookingPage() {
       if (!result?.success) throw new Error(result?.message || "Failed to fetch bookings");
       return result.data;
     },
-    staleTime: 0, // 🎯 ক্যাশ ডাটা পুরানো হওয়া প্রতিরোধ করবে
-    refetchOnWindowFocus: true, // 🎯 অন্য ট্যাব থেকে আবার পেজে এলে অটো আপডেট হবে
+    staleTime: 0, 
+    refetchOnWindowFocus: true, 
   });
 
   // 💳 Handle Payment Request
@@ -82,7 +82,7 @@ export default function BookingPage() {
 
       if (res.data?.success || res.status === 200) {
         toast.success("Booking cancelled successfully");
-        // 🎯 রিফ্রেচ এবং ক্যাশ ইনভ্যালিডেট একসাথে
+        
         queryClient.invalidateQueries({ queryKey: ["my-bookings"] });
         refetch();
       } else {
@@ -207,7 +207,7 @@ export default function BookingPage() {
                   </p>
                 </div>
 
-                {/* 🎯 Action Buttons */}
+                {/*  Action Buttons */}
                 <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
                   {/* Status: ACCEPTED */}
                   {isAccepted && (

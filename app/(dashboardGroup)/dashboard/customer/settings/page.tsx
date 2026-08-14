@@ -19,7 +19,7 @@ import ThemeToggle from "@/components/shared/ThemeToggle";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { changePasswordAction, getMe, updateMyProfile } from "@/app/(auth)/-actions/user";
 
-// 🔑 সঠিক Server Actions ইম্পোর্ট
+
 
 
 export default function CustomerSettingsPage() {
@@ -44,7 +44,7 @@ export default function CustomerSettingsPage() {
   const [emailNotif, setEmailNotif] = useState(true);
   const [bookingNotif, setBookingNotif] = useState(true);
 
-  // 🔑 ১. লগইন থাকা ইউজারের আসল ডাটা লোড করা
+  
   const {
     data: user,
     isLoading,
@@ -59,7 +59,7 @@ export default function CustomerSettingsPage() {
     },
   });
 
-  // ডাটা আসার পর ফর্মে সেট করা
+  
   useEffect(() => {
     if (user) {
       setProfileForm({

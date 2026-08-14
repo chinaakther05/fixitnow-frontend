@@ -13,7 +13,7 @@ export default function PaymentPage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const handlePayment = async () => {
-    // 🎯 ১. Booking ID চেক
+    
     if (!bookingId) {
       setErrorMsg("Invalid Booking ID. Please refresh or try again.");
       return;
@@ -26,7 +26,7 @@ export default function PaymentPage() {
       const result = await createPayment(bookingId);
 
       if (result?.success && result?.data?.checkoutUrl) {
-        // 🎯 ২. Safe external redirect
+        
         window.location.assign(result.data.checkoutUrl);
       } else {
         setErrorMsg(result?.message || "Failed to start payment processing");
