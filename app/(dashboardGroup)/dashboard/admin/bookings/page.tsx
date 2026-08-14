@@ -57,7 +57,7 @@ const AdminBookingPage = () => {
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Booking Overview</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Booking <span className="text-emerald-600 dark:text-emerald-400">Overview</span></h1>
         <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
           Monitor all bookings across the platform.
         </p>

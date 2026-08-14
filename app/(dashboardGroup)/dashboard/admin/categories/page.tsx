@@ -83,7 +83,7 @@ const AdminCategoriesPage = () => {
     <div className="max-w-5xl mx-auto px-4 py-10">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Categories</h1>
+          <h1 className="text-3xl font-bold text-foreground">Cate<span className="text-emerald-600 dark:text-emerald-400">Gories</span></h1>
           <p className="text-muted-foreground mt-1">Manage service categories.</p>
         </div>
         <Button onClick={() => setShowForm(!showForm)} className="gap-2">
