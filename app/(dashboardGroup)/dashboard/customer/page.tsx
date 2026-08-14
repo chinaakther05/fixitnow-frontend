@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { getMyBookings, cancelBooking } from '@/actions/booking';
 import { Booking } from '@/types/booking';
 import { statusStyles } from '@/lib/statusColors';
-import { Calendar, Clock, CreditCard, LayoutDashboard, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, CreditCard, LayoutDashboard, CheckCircle2, AlertCircle, Receipt } from 'lucide-react';
 
 const CustomerDashboardPage = () => {
     const queryClient = useQueryClient();
@@ -36,7 +36,6 @@ const CustomerDashboardPage = () => {
         }
     };
 
-    // Filter Logic Fix: UPPERCASE matching and case-insensitive check
     const filteredBookings = bookings?.filter((b) => {
         const status = b.status?.toUpperCase();
         if (activeTab === 'pending') {
@@ -133,6 +132,15 @@ const CustomerDashboardPage = () => {
                                 <CheckCircle2 className="w-4 h-4" />
                                 Completed
                             </button>
+
+                          
+                            <Link
+                                href="/dashboard/customer/payments"
+                                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200"
+                            >
+                                <Receipt className="w-4 h-4" />
+                                Payment History
+                            </Link>
                         </nav>
 
                         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
@@ -210,7 +218,7 @@ const CustomerDashboardPage = () => {
 
                                             {booking.status === 'COMPLETED' && (
                                                 <Link
-                                                    href={`/dashboard/customer/bookings/${booking.id}/review`}
+                                                    href={`/dashboard/customer/review?bookingId=${booking.id}`}
                                                     className="inline-flex items-center justify-center bg-amber-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:bg-amber-600 transition-colors shadow-sm shadow-amber-500/20"
                                                 >
                                                     Leave Review

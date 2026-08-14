@@ -71,3 +71,29 @@ export const confirmPayment = async (transactionId: string) => {
     return { success: false, message: "Failed to confirm payment" };
   }
 };
+
+
+
+
+export const getMyPayments = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
+
+  if (!token) {
+    return { success: false, message: "Not authenticated", data: [] };
+  }
+
+  try {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/api/payments`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return { success: false, message: "Failed to fetch payments", data: [] };
+  }
+};
