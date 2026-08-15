@@ -31,7 +31,7 @@ export function FixItNowNavbar({ user }: FixItNowNavbarProps) {
     { href: "/contact", label: "Contact" },
   ];
 
-  // `/dashboard/${user.role}` প্রিফিক্স নিশ্চিত করা হয়েছে
+  
   const rolePath = user?.role ? user.role.toLowerCase() : "";
   const dashboardPath = user ? `/dashboard/${rolePath}` : "/";
   const profilePath = user ? `/dashboard/${rolePath}/profile` : "/";

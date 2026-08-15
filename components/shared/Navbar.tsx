@@ -75,7 +75,7 @@ export default function Navbar({
 
           {/* Desktop Right Section (Auth + Theme Toggle) */}
           <div className="hidden md:flex items-center gap-3">
-            {/* ThemeToggle নিজেই Hydration সামলাবে */}
+            
             <ThemeToggle />
 
             {isAuthenticated ? (

@@ -86,7 +86,7 @@ export default function TechnicianProfilePage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-bold text-foreground">{name}</h1>
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" title="Verified Technician" />
+                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">Technician</p>
                 <div className="flex items-center gap-2 mt-2">

@@ -3,7 +3,7 @@ import { jwtVerify } from 'jose';
 
 const JWT_SECRET = process.env.JWT_ACCESS_SECRET || '';
 
-// কোন Route এর জন্য কোন Role লাগবে
+
 const protectedRoutes: Record<string, string> = {
   '/dashboard/customer': 'CUSTOMER',
   '/dashboard/technician': 'TECHNICIAN',
@@ -13,7 +13,7 @@ const protectedRoutes: Record<string, string> = {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Path Match করছে কোন Protected Route এর সাথে
+  
   const matchedRoute = Object.keys(protectedRoutes).find((route) =>
     pathname.startsWith(route)
   );

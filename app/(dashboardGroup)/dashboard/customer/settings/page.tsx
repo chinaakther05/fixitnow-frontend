@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { changePasswordAction, getMe, updateMyProfile } from "@/app/(auth)/-actions/user";
+import { logoutAction } from "@/app/(auth)/-actions/auth.action";
 
 
 

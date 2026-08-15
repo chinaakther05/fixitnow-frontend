@@ -18,14 +18,13 @@ const ToastHandler = () => {
       toast.success("Logged out successfully!");
     }
 
-    // toast দেখানোর পর URL থেকে query param মুছে ফেলা,
-    // যাতে পেজ refresh করলে আবার toast না দেখায়
+    
     if (toastType) {
       router.replace(pathname);
     }
   }, [searchParams, router, pathname]);
 
-  return null; // এই component কিছু render করে না, শুধু logic চালায়
+  return null; 
 };
 
 export default ToastHandler;

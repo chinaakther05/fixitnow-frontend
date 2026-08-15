@@ -1,17 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { User, Settings, LogOut, ChevronDown } from 'lucide-react';
 
-const ProfileDropdown = ({ user, onLogout }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
 
-  // ডেক্সটপ বা মোবাইলে ড্রপডাউনের বাইরে ক্লিক করলে ড্রপডাউন বন্ধ করার জন্য
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
+interface ProfileDropdownProps {
+  user: any;
+  onLogout: () => void;
+}
+
+const ProfileDropdown = ({ user, onLogout }: ProfileDropdownProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+ const dropdownRef = useRef<HTMLDivElement>(null);
+
+  
+ useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);

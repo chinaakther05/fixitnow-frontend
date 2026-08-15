@@ -18,7 +18,7 @@ export const getCurrentUser = async (): Promise<UserProfile | null> => {
 
     if (!token) return null;
 
-    // API URL চেক - env variable না থাকলে fallback বা null হ্যান্ডলিং
+    
     const baseUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL;
     
     if (!baseUrl) {

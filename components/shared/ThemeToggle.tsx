@@ -28,7 +28,7 @@ export default function ThemeToggle() {
       className="h-10 px-3 flex items-center justify-center gap-1 rounded-md border border-slate-300 bg-white dark:bg-slate-900 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-xs shrink-0 cursor-pointer shadow-sm z-50"
       aria-label="Toggle Theme"
     >
-      {/* আইকন বা টেক্সট দুটিই রাখা হলো যাতে খালি না দেখায় */}
+     
       <span>{theme === "dark" ? "☀️ Light" : "🌙 Dark"}</span>
     </button>
   );
