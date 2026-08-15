@@ -44,7 +44,7 @@ export default function TechnicianProfilePage() {
 
   if (!technician) return <div>Profile not found</div>;
 
-  // 🔑 Backend structure অনুযায়ী নিরাপদ fallback সহ mapping
+ 
   const name = technician.user?.name || "Unknown";
   const email = technician.user?.email || "N/A";
   const phone = technician.user?.phone || "N/A";

@@ -51,10 +51,7 @@ export default function AvailabilityPage() {
     setIsSuccess(false);
 
     try {
-      // 🎯 ব্যাকএন্ড বা সার্ভার অ্যাকশন কল করার জায়গা
-      // await updateAvailability({ isInstantAvailable, slotDuration, schedule });
-
-      // ডেমো সাবমিট ডিলে (২ সেকেন্ড)
+    
       await new Promise((resolve) => setTimeout(resolve, 1200));
 
       setIsSuccess(true);

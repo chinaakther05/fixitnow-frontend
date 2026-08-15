@@ -41,13 +41,13 @@ export default function SettingsPage() {
     setErrorMessage("");
     setSuccessMessage("");
 
-    // ১. পাসওয়ার্ড ম্যাচিং চেক
+    
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       setErrorMessage("New password and Confirm password do not match!");
       return;
     }
 
-    // ২. পাসওয়ার্ডের দৈর্ঘ্য চেক
+   
     if (passwordForm.newPassword.length < 6) {
       setErrorMessage("Password must be at least 6 characters long.");
       return;

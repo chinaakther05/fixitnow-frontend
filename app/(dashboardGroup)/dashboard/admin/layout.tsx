@@ -32,10 +32,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="flex flex-col md:flex-row gap-8">
           
-          {/* 🎯 Technician & Customer Dashboard matching Rounded Glass Sidebar */}
+          {/* Technician & Customer Dashboard matching Rounded Glass Sidebar */}
           <aside className="w-full md:w-64 shrink-0 border bg-white dark:bg-slate-900/90 border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-5 h-fit shadow-sm backdrop-blur-sm">
             
-            {/* 🔴 Click Logo & Name -> Go to Home Page ("/") */}
+            {/*  Click Logo & Name -> Go to Home Page ("/") */}
             <div className="mb-6 px-2">
               <Link href="/" className="flex items-center gap-2.5 group transition-all">
                 <div className="p-2 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">

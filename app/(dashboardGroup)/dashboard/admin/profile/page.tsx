@@ -44,7 +44,7 @@ const ProfilePage = ({ user: initialUser }: ProfilePageProps) => {
     address: "",
   });
 
-  // 🔑 ১. ব্যাকএন্ড থেকে এডমিন/ইউজারের আসল ডাটা লোড করা
+  
   const {
     data: fetchedUser,
     isLoading,
@@ -57,10 +57,10 @@ const ProfilePage = ({ user: initialUser }: ProfilePageProps) => {
       if (!res?.success) throw new Error(res?.message || "Failed to load profile");
       return res.data;
     },
-    initialData: initialUser, // প্যারেন্ট থেকে ডাটা আসলে তা ইনিশিয়ালি সেট হবে
+    initialData: initialUser,
   });
 
-  // বর্তমান এক্টিভ ইউজার অবজেক্ট
+  
   const currentUser = {
     name: fetchedUser?.name || "System Admin",
     email: fetchedUser?.email || "admin@fixitnow.com",
@@ -76,7 +76,7 @@ const ProfilePage = ({ user: initialUser }: ProfilePageProps) => {
       : "August 2026",
   };
 
-  // ডাটা আসার পর ফর্মে সেট করা
+ 
   useEffect(() => {
     if (fetchedUser) {
       setFormData({
@@ -87,7 +87,7 @@ const ProfilePage = ({ user: initialUser }: ProfilePageProps) => {
     }
   }, [fetchedUser]);
 
-  // 🔑 ২. প্রোফাইল আপডেট Mutation
+ 
   const updateProfileMutation = useMutation({
     mutationFn: async (updatedData: { name?: string; phone?: string; address?: string }) => {
       const res = await updateMyProfile(updatedData);

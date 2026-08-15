@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { getTechnicianBookings } from '@/actions/booking';
-// TODO: আপনার প্রজেক্টের সঠিক path অনুযায়ী updateTechnicianAvailability ইম্পোর্ট করুন
+
 // import { updateTechnicianAvailability, getTechnicianProfile } from '@/actions/technician'; 
 import { Booking } from '@/types/booking';
 import { statusStyles } from '@/lib/statusColors';
@@ -23,7 +23,7 @@ import {
 
 const TechnicianDashboardPage = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'pending' | 'upcoming' | 'completed'>('overview');
-    const [isAvailable, setIsAvailable] = useState<boolean>(true); // Local availability state
+    const [isAvailable, setIsAvailable] = useState<boolean>(true); 
     const queryClient = useQueryClient();
 
     // Fetch Bookings Data
@@ -39,16 +39,15 @@ const TechnicianDashboardPage = () => {
     // Toggle Availability Mutation (Server Action Call)
     const toggleAvailabilityMutation = useMutation({
         mutationFn: async (newStatus: boolean) => {
-            // Server Action Call Here
-            // return await updateTechnicianAvailability(newStatus);
+            
             return { success: true }; 
         },
         onSuccess: () => {
-            // Real-time update confirm হওয়ার পর React Query cache invalidate করতে পারেন
+         
             queryClient.invalidateQueries({ queryKey: ['technician-profile'] });
         },
         onError: () => {
-            // Error হলে state রোডব্যাক করা
+            
             setIsAvailable((prev) => !prev);
         }
     });
