@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getCategories } from "@/app/(dashboardGroup)/-actions/category";
+import { createCategory, getCategories } from "@/app/(dashboardGroup)/-actions/category";
 
 
 

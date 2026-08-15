@@ -13,8 +13,9 @@ FixItNow is a modern, responsive **Next.js** frontend for a home services market
 | Resource | Link |
 |---|---|
 | **Live Frontend** | `[Vercel deployment link]` |
-| **Backend API** | `[Render deployment link]` |
-| **Frontend GitHub Repo** | `[GitHub repo link]` |
+| **Backend API** | `[https://fixitnow-backend-1.onrender.com/]` |
+| **Frontend GitHub Repo** | `[https://github.com/chinaakther05/fixitnow-frontend]` |
+| **Backend GitHub Repo** | `[https://github.com/chinaakther05/fixitnow-backend]` |
 | **Demo Video** | `[Loom / Google Drive link]` |
 
 ---
