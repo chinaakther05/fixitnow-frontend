@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMe } from "@/app/(auth)/-actions/user";
+import { getMe, updateMyProfile } from "@/app/(auth)/-actions/user";
 
 
 interface ProfilePageProps {
