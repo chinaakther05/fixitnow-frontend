@@ -15,7 +15,7 @@ function SuccessContent() {
 
   useEffect(() => {
     const confirm = async () => {
-      // 🔑 ১. Transaction ID না থাকলে এরর সেট করে দিতে হবে
+      
       if (!transactionId) {
         setError("Invalid request. No Transaction ID provided.");
         setLoading(false);
