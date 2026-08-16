@@ -148,7 +148,8 @@ const FeaturedServices = () => {
                 </div>
 
                 <Link
-                  href={`/services/${service.id}`}
+                  //href={`/services/${service.id}`}
+                  href="/login"
                   className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-emerald-600 dark:bg-slate-800 dark:hover:bg-emerald-600 text-slate-800 hover:text-white dark:text-slate-200 dark:hover:text-white text-xs font-semibold transition-all duration-200 shadow-sm"
                 >
                   <span>Book Now</span>

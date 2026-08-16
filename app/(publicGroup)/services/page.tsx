@@ -256,6 +256,7 @@ const ServicesPage = () => {
 
                         <Link
                           href={`/booking/${tech.id}`}
+                          
                           className="w-full text-center text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 py-2.5 rounded-xl transition-all shadow-sm active:scale-[0.98]"
                         >
                           Book Now
