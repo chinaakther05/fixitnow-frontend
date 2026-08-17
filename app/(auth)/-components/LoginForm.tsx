@@ -15,8 +15,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (!state) return;
 
-    // Login সফল হলে server action নিজেই redirect করে দেয়,
-    // তাই এখানে শুধু failure-এর ক্ষেত্রে toast দেখানো হচ্ছে
+   
     if (!state.success) {
       toast.error(state.message || "Login failed");
     }

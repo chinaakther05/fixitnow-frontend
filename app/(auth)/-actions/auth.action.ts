@@ -22,7 +22,7 @@ export const loginAction = async (
 
   let result;
 
-  // শুধু নেটওয়ার্ক/fetch-সংক্রান্ত এরর এখানে ধরা হচ্ছে
+ 
   try {
     const res = await fetch(`${process.env.BACKEND_API_URL}/api/users/login`, {
       method: "POST",
@@ -37,12 +37,12 @@ export const loginAction = async (
     };
   }
 
-  // Login ব্যর্থ হলে সরাসরি রিটার্ন (try-catch এর বাইরে)
+ 
   if (!result.success) {
     return result;
   }
 
-  // Login সফল — cookie সেট করা
+ 
   const cookieStore = await cookies();
   cookieStore.set("accessToken", result.data.accessToken, {
     httpOnly: true,
@@ -58,10 +58,9 @@ export const loginAction = async (
     sameSite: "lax",
     secure: false,
 });
+
   const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload;
 
-  // redirect() এখন try-catch এর বাইরে — তাই এটা ঠিকমতো কাজ করবে
-  // ?toast=login-success যোগ করা হয়েছে, যাতে dashboard পেজে গিয়ে toast দেখানো যায়
   switch (decodedToken.role) {
     case "CUSTOMER":
       redirect("/dashboard/customer?toast=login-success");
@@ -76,6 +75,9 @@ export const loginAction = async (
       redirect("/");
   }
 };
+
+
+
 
 export const registerAction = async (payload: {
   name: string;
