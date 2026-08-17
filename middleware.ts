@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('accessToken')?.value;
 
   if (!token) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   try {
@@ -39,7 +39,7 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.next();
   } catch (error) {
-    return NextResponse.redirect(new URL('/auth/login', request.url));
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 }
 
