@@ -108,3 +108,74 @@ export const logoutAction = async () => {
   cookieStore.delete("accessToken");
   redirect("/login?toast=logout-success");
 };
+
+
+
+
+
+export const googleLoginAction = async (idToken: string) => {
+  let result;
+
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_API_URL}/api/users/google-login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+        cache: "no-store",
+      }
+    );
+
+    result = await res.json();
+  } catch {
+    return {
+      success: false,
+      message: "Could not connect to server. Please try again.",
+    };
+  }
+
+  if (!result.success || !result.data?.accessToken) {
+    return {
+      success: false,
+      message: result.message || "Google login failed.",
+    };
+  }
+
+  const cookieStore = await cookies();
+
+  cookieStore.set("accessToken", result.data.accessToken, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+  });
+
+  const decodedToken = jwt.decode(
+    result.data.accessToken
+  ) as JwtPayload | null;
+
+  if (!decodedToken || typeof decodedToken.role !== "string") {
+    cookieStore.delete("accessToken");
+
+    return {
+      success: false,
+      message: "Invalid login token.",
+    };
+  }
+
+  switch (decodedToken.role) {
+    case "CUSTOMER":
+      redirect("/dashboard/customer?toast=login-success");
+
+    case "TECHNICIAN":
+      redirect("/dashboard/technician?toast=login-success");
+
+    case "ADMIN":
+      redirect("/dashboard/admin?toast=login-success");
+
+    default:
+      redirect("/");
+  }
+};

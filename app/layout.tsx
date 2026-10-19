@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import QueryProvider from "@/providers/QueryProvider";
 import Footer from "@/components/shared/Footer";
 import ThemeProvider from "@/components/providers/ThemeProvider";
+import GoogleAuthProvider from "@/components/GoogleAuthProvider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const merriweatherHeading = Merriweather({ subsets: ["latin"], variable: "--font-heading" });
@@ -30,6 +31,7 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+        <GoogleAuthProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -37,7 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            {/* Navbar-এর জন্য ক্যাচ ফিলব্যাক সহ Suspense */}
+            
             <Suspense fallback={<div className="h-16 w-full border-b bg-background" />}>
               <NavbarServer />
             </Suspense>
@@ -52,6 +54,7 @@ export default function RootLayout({
             <Toaster />
           </QueryProvider>
         </ThemeProvider>
+        </GoogleAuthProvider>
       </body>
     </html>
   );
