@@ -299,7 +299,7 @@ export default function BookingPage() {
                   rows={4}
                   placeholder="Describe the issue and any details the technician should know..."
                   value={problem}
-                  onChange={setProblem}
+                  onChange={(e) => setProblem(e.target.value)}
                   className={`${inputClass} resize-y`}
                 />
               </div>

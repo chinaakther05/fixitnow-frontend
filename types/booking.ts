@@ -13,6 +13,9 @@ export interface Booking {
   category?: {
     name: string;
   };
+    service?: {
+    name?: string;
+  } | null;
   payment?: {
     status: string;
   };
